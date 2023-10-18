@@ -140,7 +140,7 @@ MongoClient.connect(mongoURL)
   //연결되면 할일
   .then((client) => {
     http.listen(process.env.PORT, function () {
-      console.log("listening on 8080");
+      console.log("listening on 80");
     });
 
     db = client.db("todoapp");
