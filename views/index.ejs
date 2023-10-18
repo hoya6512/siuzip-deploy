@@ -588,7 +588,7 @@
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
-        // console.log(`You live in ${latitude} and ${longitude}`);
+        console.log(`You live in ${latitude} and ${longitude}`);
         // https://api-bdc.net/data/reverse-geocode?latitude=36.614994&longitude=127.504832&localityLanguage=ko&key=bdc_0c4395a27c5c4b10acad0829b34997a2
         fetch(
           `https://api-bdc.net/data/reverse-geocode?latitude=${latitude}&longitude=${longitude}&localityLanguage=ko&key=bdc_0c4395a27c5c4b10acad0829b34997a2`
