@@ -1,0 +1,397 @@
+<nav
+  class="navbar navbar-expand-lg fixed-top px-2 shadow-sm"
+  style="background-color: #3b5998"
+  data-bs-theme="dark"
+>
+  <div class="container">
+    <a class="navbar-brand" href="/" style="color: white; font-weight: 900"
+      ><img
+        src="/image/favicon/favicon.png"
+        alt="Siune"
+        width="32px"
+        height="32px"
+      />
+      시우네</a
+    >
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="offcanvasNavbar"
+      aria-labelledby="offcanvasNavbarLabel"
+      style="max-width: 70%"
+    >
+      <div class="offcanvas-header" style="background-color: #3b5998">
+        <h5
+          class="offcanvas-title"
+          style="font-weight: 900"
+          id="offcanvasNavbarLabel"
+        >
+          시우네
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body" style="background-color: #3b5998">
+        <ul class="navbar-nav justify-content-end flex-grow-1">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/todo">TODO</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/blog/1">BLOG</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/socket">CHAT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active me-3" href="/standings">4대리그</a>
+          </li>
+          <li>
+            <a class="nav-link me-3">|</a>
+          </li>
+          <% if (locals.logged) { %>
+          <li class="nav-item me-2">
+            <a class="nav-link active" href="/mypage">
+              <img
+                class="img-fluid rounded-circle"
+                src="<%=사용자.role %>"
+                onerror="this.src='/image/guest.png'"
+                style="width: 1rem; height: 1rem"
+              />
+              <%=사용자.id %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/logout">LOGOUT</a>
+          </li>
+          <% } else { %>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              style="cursor: pointer"
+              >LOGIN</a
+            >
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="modal fade" id="loginModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background-color: #dfe3ee">
+      <div class="modal-body">
+        <div class="log-main">
+          <div class="title-name mb-5">
+            <h1>Log In</h1>
+          </div>
+          <form class="log-main-form" action="/login" method="POST">
+            <div class="log-main-form-inputs">
+              <div>
+                <input
+                  type="text"
+                  name="id"
+                  placeholder="  아이디"
+                  id="log-input1"
+                  tabindex="1"
+                />
+                <span id="log-span1"></span>
+              </div>
+
+              <div>
+                <input
+                  type="password"
+                  placeholder="  비밀번호"
+                  required
+                  id="log-input2"
+                  name="pw"
+                  tabindex="2"
+                />
+                <i class="fa-solid fa-eye" id="log-eye-icon"></i>
+                <span id="log-span2"></span>
+              </div>
+            </div>
+            <div class="log-main-form-buttons">
+              <a
+                href="/signup"
+                class="log-main-form-buttons-btn1 button"
+                id="register"
+              >
+                <span>회원가입</span>
+              </a>
+              <button type="submit" class="log-main-form-buttons-btn2 button">
+                <span>로그인</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="height: 50px; width: 100%"></div>
+
+<script>
+  const logInput1 = document.getElementById("log-input1");
+  const logInput2 = document.getElementById("log-input2");
+
+  const logSpan1 = document.getElementById("log-span1");
+  const logSpan2 = document.getElementById("log-span2");
+
+  logInput1.addEventListener("click", () => {
+    logSpan1.style.width = "100%";
+  });
+  logInput1.addEventListener("blur", () => {
+    logSpan1.style.width = "0";
+  });
+
+  logInput2.addEventListener("click", () => {
+    logSpan2.style.width = "100%";
+  });
+  logInput2.addEventListener("blur", () => {
+    logSpan2.style.width = "0";
+  });
+
+  // here begins the show the password
+
+  const logEyeIcon = document.getElementById("log-eye-icon");
+
+  logInput2.addEventListener("input", () => {
+    logEyeIcon.style.visibility = "visible";
+  });
+
+  let logFlag = 0;
+  logEyeIcon.addEventListener("click", () => {
+    if (logFlag == 0) {
+      logInput2.type = "text";
+      logFlag = 1;
+      logEyeIcon.setAttribute("class", "fa-solid fa-eye-slash");
+    } else {
+      logInput2.type = "password";
+      logFlag = 0;
+      logEyeIcon.setAttribute("class", "fa-solid fa-eye");
+    }
+  });
+</script>
+<style>
+  .nav-item a {
+    position: relative;
+    padding: 6px 12px;
+  }
+
+  .nav-item a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 4px;
+    background: #e6f0ffff;
+    transition: all 0.3s ease-out;
+  }
+
+  .nav-item a:hover::after {
+    width: 100%;
+  }
+
+  .title-name h1 {
+    text-align: center;
+
+    text-transform: uppercase;
+    font-size: 26px;
+    letter-spacing: 1px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 16px 0;
+    grid-gap: 22px;
+
+    font-weight: 300;
+    font-size: 30px;
+    color: #080808;
+  }
+
+  .title-name h1:after,
+  .title-name h1:before {
+    content: " ";
+    display: block;
+    border-bottom: 2px solid #ccc;
+    background-color: #f8f8f8;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .log-main {
+    height: 60vh;
+  }
+
+  .log-main-form {
+    height: 80%;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .log-main-form-inputs {
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 0 5%;
+  }
+
+  .log-main-form-inputs div {
+    height: 2.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+  }
+
+  .log-main-form-inputs span {
+    height: 2px;
+    width: 0px;
+    background: #1a7d9e;
+    position: absolute;
+    transition: width 0.8s;
+  }
+
+  .log-main-form-inputs div input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #31416e;
+    font-size: 1rem;
+  }
+
+  .log-main-form-inputs div input:focus {
+    outline: none;
+  }
+  .log-main-form-inputs div input::placeholder {
+    letter-spacing: 1px;
+    font-size: 0.95rem;
+  }
+
+  #log-eye-icon {
+    position: absolute;
+    right: 1%;
+    top: 30%;
+    opacity: 80%;
+    cursor: pointer;
+    visibility: hidden;
+  }
+
+  .log-main-form-inputs a {
+    text-decoration: none;
+    align-self: center;
+    color: #343434;
+    letter-spacing: 1.5px;
+    opacity: 85%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .log-main-form-inputs a:hover {
+    color: #000;
+    opacity: none;
+  }
+
+  .log-main-form-buttons {
+    height: 15%;
+    display: flex;
+  }
+
+  .log-main-form-buttons .button {
+    height: 100%;
+    flex-basis: 0;
+    flex-grow: 1;
+    border: none;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center; /*add to the buttons display flex and justify content for use in span*/
+  }
+
+  .log-main-form-buttons .button:hover {
+    cursor: pointer;
+  }
+
+  .log-main-form-buttons-btn1 {
+    background: #f2f2f2;
+    text-decoration: none;
+    color: #000;
+  }
+
+  .log-main-form-buttons-btn1:hover {
+    background: #d9d9d9;
+  }
+
+  .log-main-form-buttons-btn2 {
+    background: #28385d;
+    justify-content: end;
+    color: #fff;
+  }
+
+  .log-main-form-buttons-btn2:hover {
+    background: #385d8c;
+  }
+
+  .log-main-form-buttons .button span {
+    margin: 0 6%;
+    letter-spacing: 2px;
+  }
+
+  .log-main-form-buttons-btn1 span {
+    opacity: 80%;
+  }
+
+  @media screen and (max-width: 500px) {
+    .log-main {
+      height: 60%;
+      padding-left: 0;
+      padding-right: 0;
+
+      justify-content: center;
+    }
+
+    .log-main-form-buttons .button {
+      justify-content: center;
+    }
+
+    .log-main-form {
+      height: 360px;
+      flex-basis: 85%;
+    }
+  }
+
+  @media screen and (max-width: 250px) {
+    html {
+      font-size: 12px;
+    }
+  }
+</style>

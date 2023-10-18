@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>실시간 채팅방</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/main.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js"
+      integrity="sha512-Z6C1p1NIexPj5MsVUunW4pg7uMX6/TT3CUVldmjXx2kpip1eZcrAnxIusDxyFIikyM9A61zOVNgvLr/TGudOQg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
+    <%- include('favicon.html') %>
+  </head>
+  <body>
+    <%- include('nav.html') %>
+
+    <div class="container-xl mb-5 pt-5">
+      <div class="title-name mb-5">
+        <h1><%= 사용자.id %>의 채팅방</h1>
+      </div>
+
+      <input value="<%= 사용자.id %>" id="userId" class="visually-hidden" />
+      <input value="<%= 사용자.role %>" id="userIcon" class="visually-hidden" />
+      <div class="chat-room">
+        <div class="chat-content-scroll">
+          <ul class="list-group chat-content"></ul>
+        </div>
+        <div class="input-group">
+          <input class="form-control" id="chat-input" />
+          <button class="btn btn-secondary" id="send">전송</button>
+        </div>
+      </div>
+    </div>
+    <!-- <button id="room1">채팅방1 입장</button>
+    <button id="room1-send">채팅방1에 메세지보내기</button> -->
+    <script>
+      var socket = io();
+
+      //서버로 user의 정보를 전달한다
+      socket.emit("login", {
+        name: $("#userId").val(),
+        userIcon: $("#userIcon").val(),
+      });
+
+      // 서버에서부터 login에 대한 메시지를 수신
+      socket.on("login", function (data) {
+        // console.log(data);
+        $(".chat-content").append(
+          `<li><span class="login-box shadow-sm">${data}</span></li>`
+        );
+        $(".chat-content-scroll").animate(
+          { scrollTop: $(".chat-content-scroll").prop("scrollHeight") },
+          200
+        );
+      });
+
+      // 서버에서부터 logout에 대한 메시지를 수신
+      socket.on("logout", function (data) {
+        // console.log(data);
+        $(".chat-content").append(
+          `<li><span class="login-box shadow-sm">${data}</span></li>`
+        );
+        $(".chat-content-scroll").animate(
+          { scrollTop: $(".chat-content-scroll").prop("scrollHeight") },
+          200
+        );
+      });
+
+      // 메세지 받기
+      socket.on("broadcast", function (data) {
+        // console.log(data);
+        $(".chat-content").append(
+          `<li class="chat-receive d-flex align-items-start">
+            <img class="img-fluid rounded-circle mt-2 me-2 shadow-sm" src="${data[3]}" onerror="this.src='/image/guest.png'" style="width: 40px; height: 40px"> 
+            <div class="d-block">
+            <p class="mb-1 fs-5">${data[0]}</p>
+            <span class="chat-box shadow-sm">${data[1]}</span>
+            <span class="chat-time">${data[2]}</span>
+            </div>
+          </li>`
+        );
+        $(".chat-content-scroll").animate(
+          { scrollTop: $(".chat-content-scroll").prop("scrollHeight") },
+          200
+        );
+      });
+
+      // 메세지 보내기
+      // input이 비어있지 않고 && enter키를 눌렀을때 작동
+      // 본인이 발송한 메세지는 오른쪽에 append
+      $("#chat-input").on("keyup", function () {
+        if (window.event.keyCode == 13 && $(this).val() != "") {
+          $(".chat-content").append(
+            `<li class="chat-send"><span class="chat-time">${dayjs()
+              .locale("ko")
+              .format(
+                "A hh:mm"
+              )}</span><span class="chat-box mine shadow-sm">${$(
+              this
+            ).val()}</span></li>`
+          );
+          socket.emit("user-send", $(this).val());
+          $(this).val("");
+          $(".chat-content-scroll").animate(
+            { scrollTop: $(".chat-content-scroll").prop("scrollHeight") },
+            200
+          );
+        }
+      });
+      $("#send").click(function () {
+        if ($("#chat-input").val() != "") {
+          $(".chat-content").append(
+            `<li class="chat-send"><span class="chat-time">${dayjs()
+              .locale("ko")
+              .format(
+                "A hh:mm"
+              )}</span><span class="chat-box mine shadow-sm">${$(
+              "#chat-input"
+            ).val()}</span></li>`
+          );
+          socket.emit("user-send", $("#chat-input").val());
+          $("#chat-input").val("");
+          $(".chat-content-scroll").animate(
+            { scrollTop: $(".chat-content-scroll").prop("scrollHeight") },
+            200
+          );
+        }
+      });
+
+      // $("#room1").click(function () {
+      //   socket.emit("join-room", "room1");
+      // });
+
+      // $("#room1-send").click(function () {
+      //   socket.emit("room1-send", $("#chat-input").val());
+      // });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      .chat-content-scroll {
+        height: 450px;
+        overflow: auto;
+        padding: 10px;
+        text-align: center;
+      }
+      .chat-content li {
+        margin-top: 10px;
+        list-style: none;
+      }
+
+      .chat-box {
+        background: #ffffff;
+        color: black;
+        font-weight: 600;
+        font-size: larger;
+        padding: 5px;
+        border-radius: 5px;
+        vertical-align: super;
+        overflow-wrap: break-word;
+        display: inline-block;
+        max-width: 70%;
+      }
+
+      .mine {
+        background-color: #fef01b;
+        color: black;
+      }
+
+      .chat-room {
+        background-color: #dfe3ee;
+      }
+
+      .login-box {
+        display: inline-block;
+        width: 90%;
+        background: #8b9dc3;
+        color: white;
+        font-weight: 600;
+        font-size: small;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      .chat-time {
+        font-size: small;
+        margin-right: 4px;
+      }
+
+      .chat-receive {
+        text-align: left;
+      }
+
+      .chat-send {
+        text-align: right;
+      }
+
+      .title-name h1 {
+        text-align: center;
+
+        text-transform: uppercase;
+        font-size: 26px;
+        letter-spacing: 1px;
+
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-rows: 16px 0;
+        grid-gap: 22px;
+
+        font-weight: 300;
+        font-size: 30px;
+        color: #080808;
+      }
+
+      .title-name h1:after,
+      .title-name h1:before {
+        content: " ";
+        display: block;
+        border-bottom: 2px solid #ccc;
+        background-color: #f8f8f8;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+<ul class="todo-list list-group">
+  <%if (data.length == 0) {%>
+  <h4 class="text-center">결과가 없습니다.</h4>
+  <%}%> <% for (var i = 0; i < data.length; i++) {%>
+  <li
+    class="shadow-sm <%- data[i].checked === 'true' ? 'checked' : 'unchecked'%>"
+    style="overflow: hidden"
+  >
+    <div
+      class="row align-items-center p-2 mx-0 mb-2 rounded-top shadow-sm"
+      style="background-color: #8b9dc3"
+    >
+      <div class="col-md-9">
+        <% if (data[i].checked === 'true') {%>
+        <h2 style="text-decoration: line-through">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="checkbox-name"
+            data-id="<%= data[i]._id%>"
+            checked="checked"
+          />
+          <a
+            class="link-underline link-underline-opacity-0 link-underline-opacity-0-hover"
+            style="font-weight: 900"
+            href="/todo-detail/<%= data[i]._id %>"
+            id="title<%= data[i]._id%>"
+          >
+            <%= data[i].제목 %>
+          </a>
+        </h2>
+        <% } else {%>
+        <h2>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="checkbox-name"
+            data-id="<%= data[i]._id%>"
+          />
+          <a
+            class="link-underline link-underline-opacity-0 link-underline-opacity-0-hover"
+            style="font-weight: 900"
+            href="/todo-detail/<%= data[i]._id %>"
+            id="title<%= data[i]._id%>"
+          >
+            <%= data[i].제목 %>
+          </a>
+        </h2>
+        <% } %>
+      </div>
+      <div class="col-md-3 text-end d-flex d-md-block justify-content-between">
+        <p class="mb-0" style="color: white; font-weight: 800">
+          작성자 : <%= data[i].작성자id %>
+        </p>
+        <a
+          class="link-underline link-underline-opacity-0 link-underline-opacity-0-hover fs-5 mb-0"
+          href="/todo-detail/<%= data[i]._id %>"
+          ><i class="fa-solid fa-comments"></i>(<%= data[i].댓글.length %>)</a
+        >
+      </div>
+    </div>
+    <div
+      class="row d-flex p-2 mb-2 mx-0 shadow-sm"
+      style="background-color: #dfe3ee"
+    >
+      <div class="col-md-6">
+        <span style="font-weight: 600">기한 : <%= data[i].날짜 %></span>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <span style="font-weight: 600">작성 : <%= data[i].작성일자 %></span>
+      </div>
+    </div>
+
+    <div
+      class="collapse p-3 mb-0 text-emphasis-secondary shadow-sm"
+      id="collapse<%= data[i]._id %>"
+      style="background-color: #f7f7f7"
+    >
+      <%- data[i].내용 %>
+    </div>
+    <div class="d-grid">
+      <button
+        class="btn btn-outline-dark shadow-sm"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapse<%= data[i]._id %>"
+        aria-expanded="false"
+        aria-controls="collapse<%= data[i]._id %>"
+      >
+        내용 펼치기
+      </button>
+    </div>
+    <!-- <div class="d-flex">
+      <% if (data[i].작성자id === 사용자.id || 사용자.admin === true) {%>
+      <div class="btn-group align-items-center w-75" role="group">
+        <a
+          class="btn btn-outline-primary shadow-sm"
+          style="font-weight: 600"
+          role="button"
+          data-id="<%= data[i]._id %>"
+          href="/todo-edit/<%= data[i]._id %>"
+        >
+          수정
+        </a>
+
+        <button
+          class="delete btn btn-outline-secondary shadow-sm"
+          style="font-weight: 600"
+          data-id="<%= data[i]._id %>"
+        >
+          삭제
+        </button>
+      </div>
+      <% } else { %>
+      <div class="btn-group align-items-center w-75" role="group">
+        <button
+          class="btn btn-outline-primary shadow-sm"
+          style="font-weight: 600"
+          role="button"
+          data-id="<%= data[i]._id %>"
+          href="/todo-edit/<%= data[i]._id %>"
+          disabled
+        >
+          수정하기
+        </button>
+
+        <button
+          class="delete btn btn-outline-secondary shadow-sm"
+          style="font-weight: 600"
+          data-id="<%= data[i]._id %>"
+          disabled
+        >
+          삭제하기
+        </button>
+      </div>
+      <% }%>
+      <div class="ms-auto p-2"></div>
+    </div> -->
+  </li>
+  <% } %>
+</ul>
+
+<style>
+  .up-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+  }
+
+  .todo-list > li {
+    margin-top: 20px;
+    list-style: none;
+    border: thin solid #8b9dc3;
+    border-radius: 10px;
+  }
+
+  .title-name h1 {
+    text-align: center;
+
+    text-transform: uppercase;
+    font-size: 26px;
+    letter-spacing: 1px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 16px 0;
+    grid-gap: 22px;
+
+    font-weight: 300;
+    font-size: 30px;
+    color: #080808;
+  }
+
+  .title-name h1:after,
+  .title-name h1:before {
+    content: " ";
+    display: block;
+    border-bottom: 2px solid #ccc;
+    background-color: #f8f8f8;
+  }
+</style>

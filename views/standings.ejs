@@ -1,0 +1,725 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Standings</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
+    <%- include('favicon.html') %>
+  </head>
+  <body>
+    <%- include('nav.html') %>
+
+    <div class="container-xl mb-5 pt-5">
+      <div class="btn-group w-100 mb-5">
+        <button class="btn btn-outline-secondary" id="playerUpdate">
+          Player UP
+        </button>
+        <button class="btn btn-outline-secondary" id="plUpdate">
+          <img
+            src="https://media-3.api-sports.io/football/leagues/39.png"
+            style="width: 1rem"
+          />PL UP
+        </button>
+        <button class="btn btn-outline-secondary" id="llUpdate">
+          <img
+            src="https://media-3.api-sports.io/football/leagues/140.png"
+            style="width: 1rem"
+          />LL UP
+        </button>
+        <button class="btn btn-outline-secondary" id="blUpdate">
+          <img
+            src="https://media-3.api-sports.io/football/leagues/78.png"
+            style="width: 1rem"
+          />
+          BL UP
+        </button>
+        <button class="btn btn-outline-secondary" id="saUpdate">
+          <img
+            src="https://media-3.api-sports.io/football/leagues/135.png"
+            style="width: 1rem"
+          />
+          SA UP
+        </button>
+      </div>
+
+      <script>
+        $("#playerUpdate").on("click", function () {
+          if (confirm("참가자 순위를 업데이트 하시겠습니까?")) {
+            $.ajax({
+              method: "GET",
+              url: "/playerUpdate",
+            })
+              .done(function (결과) {
+                alert("참가자 순위가 업데이트 되었습니다");
+                window.location.reload();
+              })
+              .fail(function (xhr, textStatus, errorThrown) {
+                console.log(xhr, textStatus, errorThrown);
+              });
+          }
+        });
+
+        $("#plUpdate").on("click", function () {
+          if (confirm("프리미어 리그 순위를 업데이트 하시겠습니까?")) {
+            $.ajax({
+              method: "GET",
+              url: "/plUpdate",
+            })
+              .done(function (결과) {
+                alert("프리미어 리그 순위가 업데이트 되었습니다");
+                window.location.reload();
+              })
+              .fail(function (xhr, textStatus, errorThrown) {
+                console.log(xhr, textStatus, errorThrown);
+              });
+          }
+        });
+
+        $("#llUpdate").on("click", function () {
+          if (confirm("라리가 순위를 업데이트 하시겠습니까?")) {
+            $.ajax({
+              method: "GET",
+              url: "/llUpdate",
+            })
+              .done(function (결과) {
+                alert("라리가 순위가 업데이트 되었습니다");
+                window.location.reload();
+              })
+              .fail(function (xhr, textStatus, errorThrown) {
+                console.log(xhr, textStatus, errorThrown);
+              });
+          }
+        });
+
+        $("#blUpdate").on("click", function () {
+          if (confirm("분데스리가 순위를 업데이트 하시겠습니까?")) {
+            $.ajax({
+              method: "GET",
+              url: "/blUpdate",
+            })
+              .done(function (결과) {
+                alert("분데스리가 순위가 업데이트 되었습니다");
+                window.location.reload();
+              })
+              .fail(function (xhr, textStatus, errorThrown) {
+                console.log(xhr, textStatus, errorThrown);
+              });
+          }
+        });
+
+        $("#saUpdate").on("click", function () {
+          if (confirm("세리에A 순위를 업데이트 하시겠습니까?")) {
+            $.ajax({
+              method: "GET",
+              url: "/saUpdate",
+            })
+              .done(function (결과) {
+                alert("세리에A 순위가 업데이트 되었습니다");
+                window.location.reload();
+              })
+              .fail(function (xhr, textStatus, errorThrown) {
+                console.log(xhr, textStatus, errorThrown);
+              });
+          }
+        });
+      </script>
+
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="text-center" scope="col"></th>
+                <th class="text-center" scope="col">이름</th>
+                <th class="text-center" scope="col">승점</th>
+                <th class="text-center" scope="col">경기</th>
+                <th class="text-center" scope="col">승</th>
+                <th class="text-center" scope="col">무</th>
+                <th class="text-center" scope="col">패</th>
+                <th class="text-center" scope="col">득실</th>
+              </tr>
+            </thead>
+            <tbody id="playerStanding"></tbody>
+          </table>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="text-center" scope="col"></th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/39.png"
+                    style="width: 1rem"
+                  />PL
+                </th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/140.png"
+                    style="width: 1rem"
+                  />LL
+                </th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/78.png"
+                    style="width: 1rem"
+                  />BL
+                </th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/135.png"
+                    style="width: 1rem"
+                  />SA
+                </th>
+              </tr>
+            </thead>
+            <tbody id="playerTeamStanding"></tbody>
+          </table>
+          <div id="playerUpdateTime"></div>
+        </div>
+
+        <script>
+          $(document).ready(function () {
+            $.ajax({
+              method: "GET",
+              url: "/playerStanding",
+            }).done(function (결과) {
+              결과.forEach(function (data, i) {
+                var plForm = [...data.pl.form];
+                // console.log(plForm);
+                var newPlForm = plForm.map(function (item, index) {
+                  if (item == "W") {
+                    return `<span class="badge rounded-pill text-bg-success p-1">승</span>`;
+                  } else if (item == "D") {
+                    return `<span class="badge rounded-pill text-bg-warning p-1">무</span>`;
+                  } else if (item == "L") {
+                    return `<span class="badge rounded-pill text-bg-danger p-1">패</span>`;
+                  }
+                });
+
+                var llForm = [...data.ll.form];
+                var newLlForm = llForm.map(function (item, index) {
+                  if (item == "W") {
+                    return `<span class="badge rounded-pill text-bg-success p-1">승</span>`;
+                  } else if (item == "D") {
+                    return `<span class="badge rounded-pill text-bg-warning p-1">무</span>`;
+                  } else if (item == "L") {
+                    return `<span class="badge rounded-pill text-bg-danger p-1">패</span>`;
+                  }
+                });
+                var blForm = [...data.bl.form];
+                var newBlForm = blForm.map(function (item, index) {
+                  if (item == "W") {
+                    return `<span class="badge rounded-pill text-bg-success p-1">승</span>`;
+                  } else if (item == "D") {
+                    return `<span class="badge rounded-pill text-bg-warning p-1">무</span>`;
+                  } else if (item == "L") {
+                    return `<span class="badge rounded-pill text-bg-danger p-1">패</span>`;
+                  }
+                });
+                var saForm = [...data.sa.form];
+                var newSaForm = saForm.map(function (item, index) {
+                  if (item == "W") {
+                    return `<span class="badge rounded-pill text-bg-success p-1">승</span>`;
+                  } else if (item == "D") {
+                    return `<span class="badge rounded-pill text-bg-warning p-1">무</span>`;
+                  } else if (item == "L") {
+                    return `<span class="badge rounded-pill text-bg-danger p-1">패</span>`;
+                  }
+                });
+
+                $("#playerStanding").append(
+                  `
+              <tr>
+                <th class="text-center" scope="row">${i + 1}</th>
+                <td class="text-center">${data.player}</td>
+                <td class="text-center">${data.totalPoints}</td>
+                <td class="text-center">${data.totalPlayed}</td>
+                <td class="text-center">${data.totalWin}</td>
+                <td class="text-center">${data.totalDraw}</td>
+                <td class="text-center">${data.totalLose}</td>
+                <td class="text-center">${data.totalGoalsDiff}</td>
+              </tr>
+              `
+                );
+
+                $("#playerTeamStanding").append(
+                  `
+                  <tr>
+                    <td class="text-center" style="vertical-align: middle">${
+                      data.player
+                    }</td>
+                    <td
+                      class="text-center team-bg"
+                      style="
+                        background-image: url(${data.pl.teamLogo});
+                      "
+                    >
+
+
+                      <p class="fs-5">${data.pl.win}/${data.pl.draw}/${
+                        data.pl.lose
+                      } (${data.pl.goalsDiff})</p>
+                      <p class="fs-4">${data.pl.points}점</p>
+                      <p class="fs-6">${newPlForm.join("")}</p>
+                    </td>
+                    <td
+                      class="text-center team-bg"
+                      style="
+                        background-image: url(${data.ll.teamLogo});
+                      "
+                    >
+
+
+                      <p class="fs-5">${data.ll.win}/${data.ll.draw}/${
+                        data.ll.lose
+                      } (${data.ll.goalsDiff})</p>
+                      <p class="fs-4">${data.ll.points}점</p>
+                      <p class="fs-6">${newLlForm.join("")}</p>
+                    </td>
+                    <td
+                      class="text-center team-bg"
+                      style="
+                        background-image: url(${data.bl.teamLogo});
+                      "
+                    >
+
+
+                      <p class="fs-5">${data.bl.win}/${data.bl.draw}/${
+                        data.bl.lose
+                      } (${data.bl.goalsDiff})</p>
+                      <p class="fs-4">${data.bl.points}점</p>
+                      <p class="fs-6">${newBlForm.join("")}</p>
+                    </td>
+                    <td
+                      class="text-center team-bg"
+                      style="
+                        background-image: url(${data.sa.teamLogo});
+                      "
+                    >
+
+
+                      <p class="fs-5">${data.sa.win}/${data.sa.draw}/${
+                        data.sa.lose
+                      } (${data.sa.goalsDiff})</p>
+                      <p class="fs-4">${data.sa.points}점</p>
+                      <p class="fs-6">${newSaForm.join("")}</p>
+                    </td>
+                  </tr>
+                  `
+                );
+              });
+
+              $("#playerUpdateTime").append(
+                `<p>업데이트 : ${결과[0].update}</p>
+              `
+              );
+            });
+          });
+        </script>
+
+        <style>
+          .team-bg {
+            position: relative;
+            height: 150px;
+            justify-content: center;
+            align-items: center;
+            vertical-align: middle;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+          }
+
+          .team-bg p {
+            position: relative;
+            z-index: 100;
+            color: rgba(255, 255, 255, 1);
+            font-weight: 600;
+            margin-bottom: 0px;
+          }
+
+          .team-bg::before {
+            position: absolute;
+            content: "";
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+          }
+        </style>
+
+        <div class="col-md-6">
+          <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <button
+                class="nav-link active"
+                id="plTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#plTable"
+                aria-controls="plTable"
+                aria-selected="true"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/39.png"
+                  style="width: 1rem"
+                />
+                PL
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                id="llTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#llTable"
+                aria-controls="llTable"
+                aria-selected="false"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/140.png"
+                  style="width: 1rem"
+                />
+                LL
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                id="blTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#blTable"
+                aria-controls="blTable"
+                aria-selected="false"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/78.png"
+                  style="width: 1rem"
+                />
+                BL
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                id="saTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#saTable"
+                aria-controls="saTable"
+                aria-selected="false"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/135.png"
+                  style="width: 1rem"
+                />
+                SA
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="plTable"
+              role="tabpanel"
+              aria-labelledby="plTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="plStanding"></tbody>
+              </table>
+              <div id="plUpdateTime"></div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="llTable"
+              role="tabpanel"
+              aria-labelledby="llTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="llStanding"></tbody>
+              </table>
+              <div id="llUpdateTime"></div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="blTable"
+              role="tabpanel"
+              aria-labelledby="blTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="blStanding"></tbody>
+              </table>
+              <div id="blUpdateTime"></div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="saTable"
+              role="tabpanel"
+              aria-labelledby="saTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="saStanding"></tbody>
+              </table>
+              <div id="saUpdateTime"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $.ajax({
+          method: "GET",
+          url: "/plStanding",
+        }).done(function (결과) {
+          결과.forEach(function (data) {
+            $("#plStanding").append(
+              `
+              <tr>
+                <th class="text-center" scope="row">${data.rank}</th>
+                <td class="text-center"><img src='${data.teamLogo}' style='width:2rem''> <p class="teamName mb-0">${data.teamName}</p></td>
+                <td class="text-center">${data.points}</td>
+                <td class="text-center">${data.played}</td>
+                <td class="text-center">${data.win}</td>
+                <td class="text-center">${data.draw}</td>
+                <td class="text-center">${data.lose}</td>
+                <td class="text-center">${data.goalsDiff}</td>
+                <td class="text-center">${data.form}</td>
+              </tr>
+              `
+            );
+          });
+          $("#plUpdateTime").append(
+            `<p>업데이트 : ${결과[0].update.substr(0, 10)}</p>
+              `
+          );
+        });
+
+        $.ajax({
+          method: "GET",
+          url: "/llStanding",
+        }).done(function (결과) {
+          결과.forEach(function (data) {
+            $("#llStanding").append(
+              `
+              <tr>
+                <th class="text-center" scope="row">${data.rank}</th>
+                <td class="text-center"><img src='${data.teamLogo}' style='width:2rem''> <p class="teamName mb-0">${data.teamName}</p></td>
+                <td class="text-center">${data.points}</td>
+                <td class="text-center">${data.played}</td>
+                <td class="text-center">${data.win}</td>
+                <td class="text-center">${data.draw}</td>
+                <td class="text-center">${data.lose}</td>
+                <td class="text-center">${data.goalsDiff}</td>
+                <td class="text-center">${data.form}</td>
+              </tr>
+              `
+            );
+          });
+          $("#llUpdateTime").append(
+            `<p>업데이트 : ${결과[0].update.substr(0, 10)}</p>
+              `
+          );
+        });
+
+        $.ajax({
+          method: "GET",
+          url: "/blStanding",
+        }).done(function (결과) {
+          결과.forEach(function (data) {
+            $("#blStanding").append(
+              `
+              <tr>
+                <th class="text-center" scope="row">${data.rank}</th>
+                <td class="text-center"><img src='${data.teamLogo}' style='width:2rem''> <p class="teamName mb-0">${data.teamName}</p></td>
+                <td class="text-center">${data.points}</td>
+                <td class="text-center">${data.played}</td>
+                <td class="text-center">${data.win}</td>
+                <td class="text-center">${data.draw}</td>
+                <td class="text-center">${data.lose}</td>
+                <td class="text-center">${data.goalsDiff}</td>
+                <td class="text-center">${data.form}</td>
+              </tr>
+              `
+            );
+          });
+          $("#blUpdateTime").append(
+            `<p>업데이트 : ${결과[0].update.substr(0, 10)}</p>
+              `
+          );
+        });
+
+        $.ajax({
+          method: "GET",
+          url: "/saStanding",
+        }).done(function (결과) {
+          결과.forEach(function (data) {
+            $("#saStanding").append(
+              `
+              <tr>
+                <th class="text-center" scope="row">${data.rank}</th>
+                <td class="text-center"><img src='${data.teamLogo}' style='width:2rem''> <p class="teamName mb-0">${data.teamName}</p></td>
+                <td class="text-center">${data.points}</td>
+                <td class="text-center">${data.played}</td>
+                <td class="text-center">${data.win}</td>
+                <td class="text-center">${data.draw}</td>
+                <td class="text-center">${data.lose}</td>
+                <td class="text-center">${data.goalsDiff}</td>
+                <td class="text-center">${data.form}</td>
+              </tr>
+              `
+            );
+          });
+          $("#saUpdateTime").append(
+            `<p>업데이트 : ${결과[0].update.substr(0, 10)}</p>
+              `
+          );
+        });
+      });
+
+      let key = "${param.key}";
+      // console.log(key);
+      if (key === "plTable") {
+        $("#llTableTab").removeClass("active");
+        $("#blTableTab").removeClass("active");
+        $("#saTableTab").removeClass("active");
+        $("#pltableTab").addClass("active");
+
+        $("#llTable").removeClass("show active");
+        $("#blTable").removeClass("show active");
+        $("#saTable").removeClass("show active");
+        $("#plTable").addClass("show active");
+      } else if (key === "llTable") {
+        $("#plTableTab").removeClass("active");
+        $("#blTableTab").removeClass("active");
+        $("#saTableTab").removeClass("active");
+        $("#lltableTab").addClass("active");
+
+        $("#plTable").removeClass("show active");
+        $("#blTable").removeClass("show active");
+        $("#saTable").removeClass("show active");
+        $("#llTable").addClass("show active");
+      } else if (key === "blTable") {
+        $("#llTableTab").removeClass("active");
+        $("#plTableTab").removeClass("active");
+        $("#saTableTab").removeClass("active");
+        $("#bltableTab").addClass("active");
+
+        $("#llTable").removeClass("show active");
+        $("#plTable").removeClass("show active");
+        $("#saTable").removeClass("show active");
+        $("#blTable").addClass("show active");
+      } else if (key === "saTable") {
+        $("#llTableTab").removeClass("active");
+        $("#plTableTab").removeClass("active");
+        $("#blTableTab").removeClass("active");
+        $("#satableTab").addClass("active");
+
+        $("#llTable").removeClass("show active");
+        $("#plTable").removeClass("show active");
+        $("#blTable").removeClass("show active");
+        $("#saTable").addClass("show active");
+      }
+    </script>
+    <style>
+      @media screen and (max-width: 540px) {
+        .teamName {
+          display: none;
+        }
+      }
+    </style>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

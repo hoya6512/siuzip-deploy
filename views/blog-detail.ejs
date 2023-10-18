@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= data.제목 %></title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/main.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
+    <script>
+      dayjs.extend(window.dayjs_plugin_utc);
+    </script>
+    <script>
+      dayjs().format();
+    </script>
+    <%- include('favicon.html') %>
+  </head>
+  <body>
+    <%- include('nav.html') %>
+    <div class="container-xl mb-5 pt-5">
+      <div class="title-name mb-5">
+        <h1>Detail</h1>
+      </div>
+
+      <ul class="shadow list-group">
+        <li class="list-group-item shadow-sm p-3">
+          <div
+            class="row align-items-center p-2 mx-0 mb-2 rounded shadow-sm"
+            style="background-color: #8b9dc3"
+          >
+            <div class="col-md-10">
+              <h2 style="font-weight: 900; color: white"><%= data.제목 %></h2>
+            </div>
+            <div class="col-md-2 text-end">
+              <span class="ms-auto p-2" style="color: white; font-weight: 800"
+                >Posted by : <%= data.작성자id %></span
+              >
+            </div>
+          </div>
+          <div
+            class="row d-flex p-2 mb-2 mx-0 rounded shadow-sm"
+            style="background-color: #dfe3ee"
+          >
+            <div class="col-md-6 py-2">
+              <span class="category py-1 px-2 rounded-pill"
+                ><%= data.카테고리 %></span
+              >
+            </div>
+            <div class="col-md-6 text-md-end py-2">
+              <span class="ms-auto" style="font-weight: 600"
+                >Posted : <%= data.작성일자 %></span
+              >
+            </div>
+          </div>
+
+          <div
+            class="p-3 mb-2 text-emphasis-secondary rounded shadow-sm"
+            style="background-color: #f7f7f7"
+          >
+            <%- data.내용 %>
+          </div>
+          <div class="d-flex">
+            <% if (data.작성자id === 사용자.id || 사용자.admin === true) {%>
+            <div class="btn-group align-items-center w-75" role="group">
+              <a
+                class="btn btn-outline-primary shadow-sm"
+                style="font-weight: 600"
+                role="button"
+                data-id="<%= data._id %>"
+                href="/blog-edit/<%= data._id %>"
+              >
+                수정
+              </a>
+
+              <button
+                class="delete btn btn-outline-secondary shadow-sm"
+                style="font-weight: 600"
+                data-id="<%= data._id %>"
+              >
+                삭제
+              </button>
+            </div>
+            <% } else { %>
+            <div class="btn-group align-items-center w-75" role="group">
+              <button
+                class="btn btn-outline-primary shadow-sm"
+                style="font-weight: 600"
+                role="button"
+                data-id="<%= data._id %>"
+                href="/blog-edit/<%= data._id %>"
+                disabled
+              >
+                수정
+              </button>
+
+              <button
+                class="delete btn btn-outline-secondary shadow-sm"
+                style="font-weight: 600"
+                data-id="<%= data._id %>"
+                disabled
+              >
+                삭제
+              </button>
+            </div>
+            <% }%>
+            <div class="text-end py-2 w-25">
+              <a
+                role="button"
+                class="btn btn-secondary w-75"
+                href="/blog/1"
+                style="font-weight: 600"
+              >
+                리스트</a
+              >
+
+              <!-- <form action="/chatroom" method="POST">
+                <input
+                  type="text"
+                  value="<%= data.작성자 %>"
+                  name="writerId"
+                  class="visually-hidden"
+                />
+                <input
+                  type="text"
+                  value="<%= data.작성자id %>"
+                  name="writer"
+                  class="visually-hidden"
+                />
+                <input
+                  type="text"
+                  value="<%= data.제목 %>"
+                  name="chatTitle"
+                  class="visually-hidden"
+                />
+                <input
+                  type="text"
+                  value="<%= 사용자._id %>"
+                  class="visually-hidden"
+                />
+                <% if ( data.작성자id === 사용자.id ) {%>
+                <button
+                  role="submit"
+                  class="btn btn-success shadow-sm w-auto"
+                  disabled
+                >
+                  해당일정 채팅방 열기
+                </button>
+                <% } else {%>
+                <button role="submit" class="btn btn-success shadow-sm w-auto">
+                  해당일정 채팅방 열기
+                </button>
+                <% } %>
+              </form> -->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- 댓글입력창 구현 -->
+    <div class="container-xl">
+      <form action="/blogReplyAdd" method="POST">
+        <div class="input-group mb-3">
+          <textarea
+            class="form-control"
+            placeholder="댓글"
+            name="reply"
+            style="height: 100px"
+          ></textarea>
+          <!-- <label for="floatingTextarea">댓글</label> -->
+          <input
+            class="visually-hidden"
+            type="text"
+            value="<%= data._id %>"
+            name="postId"
+          />
+          <button class="btn btn-outline-primary w-25 fw-bold" type="submit">
+            작성
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- 댓글 표시창 구현 -->
+    <div class="container-xl">
+      <ul class="shadow list-group mb-5">
+        <%if (data.댓글.length == 0) {%>
+        <h4 class="text-center">댓글이 없습니다. 작성해 보세요.</h4>
+        <%} else { for (var i = 0; i < data.댓글.length; i++) {%>
+        <li class="list-group-item p-0">
+          <div class="row p-3 mb-2 text-emphasis-secondary">
+            <!-- 댓글 작성자 -->
+            <div class="comment-writer col-3 col-md-2 border-end border-3">
+              <img
+                class="img-fluid rounded-circle"
+                src="<%= data.댓글[i].아이콘 %>"
+                onerror="this.src='/image/guest.png'"
+                style="width: 40px; height: 40px"
+              /><%= data.댓글[i].작성자id %>
+            </div>
+            <div class="col-9 col-md-7">
+              <!-- prettier-ignore -->
+              <div
+                class="replyContent collapse multi-collapse-<%= data.댓글[i]._id %> show"
+                style="white-space: pre-line"
+              ><%= data.댓글[i].내용 %></div>
+              <!-- prettier-ignore -->
+              <form action="/blog-reply-edit?_method=PUT" method="POST">
+                <div
+                  class="replyEdit collapse multi-collapse-<%= data.댓글[i]._id %> input-group mb-3"
+                >
+                   <!-- prettier-ignore -->
+                  <textarea class="form-control" name="detail"><%= data.댓글[i].내용 %></textarea>
+                   <!-- prettier-ignore -->
+                  <input
+                    class="visually-hidden"
+                    type="text"
+                    value="<%= data.댓글[i]._id %>"
+                    name="_id"
+                  />
+                  <input
+                    class="visually-hidden"
+                    type="text"
+                    value="<%= data.댓글[i].작성자id %>"
+                    name="작성자id"
+                  />
+                  <input
+                    class="visually-hidden"
+                    type="text"
+                    value="<%= data.댓글[i].작성자 %>"
+                    name="작성자"
+                  />
+                  <input
+                    class="visually-hidden"
+                    type="text"
+                    value="<%= data._id %>"
+                    name="postId"
+                 />
+                  <input
+                    class="visually-hidden"
+                    type="text"
+                    value="<%= data.댓글[i].아이콘 %>"
+                    name="작성자icon"
+                  />
+
+                  <button class="btn btn-outline-primary fw-bold" type="submit">
+                    수정
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div class="col-md-3">
+              <p class="text-end text-md-center mt-3 mb-1 mt-md-0">
+                <%= data.댓글[i].작성일자 %>
+              </p>
+              <% if ( data.댓글[i].작성자id === 사용자.id || 사용자.admin ===
+              true ) {%>
+
+              <div class="btn-group align-items-center w-100" role="group">
+                <button
+                  class="btn btn-outline-primary shadow-sm"
+                  style="font-weight: 600"
+                  role="button"
+                  data-id="<%= data.댓글[i]._id %>"
+                  data-bs-toggle="collapse"
+                  data-bs-target=".multi-collapse-<%= data.댓글[i]._id %>"
+                >
+                  수정
+                </button>
+                <button
+                  class="reply-delete btn btn-outline-secondary shadow-sm"
+                  style="font-weight: 600"
+                  data-id="<%= data.댓글[i]._id %>"
+                >
+                  삭제
+                </button>
+              </div>
+              <%}%>
+            </div>
+          </div>
+        </li>
+        <%}}%>
+      </ul>
+    </div>
+
+    <script>
+      // 게시물 삭제 jquery 구문
+      $(".delete").click(function (e) {
+        var 글번호 = e.target.dataset.id;
+        var 지금누른거 = $(this);
+        if (confirm("게시물을 삭제하시겠습니까?")) {
+          // console.log(글번호);
+          $.ajax({
+            method: "DELETE",
+            url: "/blog-delete",
+            data: { _id: 글번호 },
+          })
+            .done(function (결과) {
+              console.log("삭제 완료");
+              location.replace("/blog");
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+              console.log(xhr, textStatus, errorThrown);
+            });
+        }
+      });
+    </script>
+    <script>
+      // 댓글 삭제 jquery 구문
+      $(".reply-delete").click(function (e) {
+        var 글번호 = e.target.dataset.id;
+        console.log(글번호);
+        var 지금누른거 = $(this);
+        if (confirm("댓글을 삭제하시겠습니까?")) {
+          // console.log(글번호);
+          $.ajax({
+            method: "PUT",
+            url: "/blog-reply-delete",
+            data: { _id: 글번호 },
+          })
+            .done(function (결과) {
+              console.log("삭제 완료");
+              지금누른거.parents("li").fadeOut();
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+              console.log(xhr, textStatus, errorThrown);
+            });
+        }
+      });
+    </script>
+    <style>
+      .title-name h1 {
+        text-align: center;
+
+        text-transform: uppercase;
+        font-size: 26px;
+        letter-spacing: 1px;
+
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-rows: 16px 0;
+        grid-gap: 22px;
+
+        font-weight: 300;
+        font-size: 30px;
+        color: #080808;
+      }
+
+      .title-name h1:after,
+      .title-name h1:before {
+        content: " ";
+        display: block;
+        border-bottom: 2px solid #ccc;
+        background-color: #f8f8f8;
+      }
+
+      .category {
+        border: thin solid #8b9dc3;
+        background-color: #dfe3ee;
+        color: #3b5998;
+        font-weight: 600;
+      }
+
+      /* p {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+      } */
+      p iframe,
+      p object,
+      p embed {
+        /* position: absolute; */
+        /* top: 0;
+        left: 0; */
+        width: 100%;
+        /* height: 100%; */
+      }
+
+      @media screen and (max-width: 738px) {
+        .comment-writer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
