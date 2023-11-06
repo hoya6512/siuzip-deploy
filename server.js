@@ -2029,7 +2029,7 @@ app.get("/playerUpdate", async (요청, 응답) => {
 app.get("/playerStanding", function (요청, 응답) {
   db.collection("playerStanding")
     .find()
-    .sort({ totalPoints: -1 })
+    .sort({ totalPoints: -1, totalGoalsDiff: -1 })
     .toArray()
     .then((결과) => {
       // console.log(결과);
