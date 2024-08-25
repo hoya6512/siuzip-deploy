@@ -1535,7 +1535,7 @@ app.get("/plUpdate", function (요청, 응답) {
     method: "GET",
     url: "https://api-football-v1.p.rapidapi.com/v3/standings",
     qs: {
-      season: "2023",
+      season: "2024",
       league: premierLeague,
     },
     headers: {
@@ -1610,7 +1610,7 @@ app.get("/llUpdate", function (요청, 응답) {
     method: "GET",
     url: "https://api-football-v1.p.rapidapi.com/v3/standings",
     qs: {
-      season: "2023",
+      season: "2024",
       league: laLiga,
     },
     headers: {
@@ -1685,7 +1685,7 @@ app.get("/blUpdate", function (요청, 응답) {
     method: "GET",
     url: "https://api-football-v1.p.rapidapi.com/v3/standings",
     qs: {
-      season: "2023",
+      season: "2024",
       league: bundesLiga,
     },
     headers: {
@@ -1760,7 +1760,7 @@ app.get("/saUpdate", function (요청, 응답) {
     method: "GET",
     url: "https://api-football-v1.p.rapidapi.com/v3/standings",
     qs: {
-      season: "2023",
+      season: "2024",
       league: serieA,
     },
     headers: {
