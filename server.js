@@ -1868,6 +1868,14 @@ app.get("/playerUpdate", async (요청, 응답) => {
     var saTeamLogo;
     var saTeamForm;
 
+    var totalCupPoint;
+
+    db.collection("playerStanding")
+      .findOne({ player: element.player })
+      .then((결과) => {
+        totalCupPoint = 결과.totalCupPoint;
+      });
+
     db.collection("premierLeague")
       .findOne({ teamId: parseInt(element.pl) })
       .then((결과) => {
@@ -1880,6 +1888,22 @@ app.get("/playerUpdate", async (요청, 응답) => {
         plTeamName = 결과.teamName;
         plTeamLogo = 결과.teamLogo;
         plTeamForm = 결과.form;
+        // plChamps = 결과.champs;
+        // plEuropa = 결과.europa;
+        // plConference = 결과.conference;
+        // plLeagueCup = 결과.leagueCup;
+        // if (plChamps == true) {
+        //   plCupPoint += 20;
+        // }
+        // if (plEuropa == true) {
+        //   plCupPoint += 15;
+        // }
+        // if (plConference == true) {
+        //   plCupPoint += 10;
+        // }
+        // if (plLeagueCup == true) {
+        //   plCupPoint += 7;
+        // }
       });
 
     db.collection("laLiga")
@@ -1929,7 +1953,8 @@ app.get("/playerUpdate", async (요청, 응답) => {
         parseInt(plPoints) +
         parseInt(llPoints) +
         parseInt(blPoints) +
-        parseInt(saPoints);
+        parseInt(saPoints) +
+        parseInt(totalCupPoint);
       // console.log("totalPoints : " + totalPoints);
       var totalPlayed =
         parseInt(plPlayed) +
@@ -1967,6 +1992,7 @@ app.get("/playerUpdate", async (요청, 응답) => {
         totalDraw: totalDraw,
         totalLose: totalLose,
         totalGoalsDiff: totalGoalsDiff,
+        // totalCupPoint: 0,
         pl: {
           teamName: plTeamName,
           teamLogo: plTeamLogo,
