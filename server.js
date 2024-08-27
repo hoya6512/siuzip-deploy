@@ -69,7 +69,6 @@ const sessionOption = {
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60,
-    secure: true,
   },
   // store: new RedisStore({ client: redisClient }),
 };
