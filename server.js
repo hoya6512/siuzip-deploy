@@ -241,6 +241,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   // 세션에 저장되어 있는 id를 인자 값으로 전달받음
   try {
+    console.log("deserialize 실행");
     const user = await db.collection("login").findOne({ id: id });
     done(null, user); // req.user 객체 생성
   } catch {
