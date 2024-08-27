@@ -68,8 +68,7 @@ const sessionOption = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    httpOnly: true,
-    secure: false,
+    maxAge: 1000 * 60 * 60,
   },
   // store: new RedisStore({ client: redisClient }),
 };
@@ -232,6 +231,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+  // console.log(user.id + "로 로그인 성공");
   return done(null, user.id);
 });
 // passport.serializeUser(function (user, done) {
@@ -239,16 +239,27 @@ passport.serializeUser((user, done) => {
 // });
 
 passport.deserializeUser(async (id, done) => {
+  // 세션에 저장되어 있는 id를 인자 값으로 전달받음
   try {
-    // DB에서 findOne으로 user는 이상한 객체 형식으로 되어 있어서
-    // 나중에 routes/user.js에서 user.toJSON() 으로 변환해주어야 한다.
     const user = await db.collection("login").findOne({ id: id });
-    if (user) return done(null, user);
-  } catch (e) {
-    console.error(e);
-    return done(e);
+    done(null, user); // req.user 객체 생성
+  } catch {
+    done(null, false, {
+      message: "서버에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+    });
   }
 });
+
+// passport.deserializeUser(async (id, done) => {
+//   try {
+
+//     const user = await db.collection("login").findOne({ id: id });
+//     if (user) return done(null, user);
+//   } catch (e) {
+//     console.error(e);
+//     return done(e);
+//   }
+// });
 
 // passport.deserializeUser(function (아이디, done) {
 //   db.collection("login")
