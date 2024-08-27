@@ -231,17 +231,32 @@ passport.use(
   )
 );
 
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
+passport.serializeUser((user, done) => {
+  return done(null, user.id);
+});
+// passport.serializeUser(function (user, done) {
+//   return done(null, user.id);
+// });
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    // DB에서 findOne으로 user는 이상한 객체 형식으로 되어 있어서
+    // 나중에 routes/user.js에서 user.toJSON() 으로 변환해주어야 한다.
+    const user = await db.collection("login").findOne({ id: id });
+    if (user) return done(null, user);
+  } catch (e) {
+    console.error(e);
+    return done(e);
+  }
 });
 
-passport.deserializeUser(function (아이디, done) {
-  db.collection("login")
-    .findOne({ id: 아이디 })
-    .then((결과) => {
-      done(null, 결과);
-    });
-});
+// passport.deserializeUser(function (아이디, done) {
+//   db.collection("login")
+//     .findOne({ id: 아이디 })
+//     .then((결과) => {
+//       done(null, 결과);
+//     });
+// });
 
 // edit function 구현
 app.put("/todo-edit", 로그인했니, function (요청, 응답) {
