@@ -66,9 +66,10 @@ const session = require("express-session");
 const sessionOption = {
   secret: process.env.COOKIE_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
     maxAge: 1000 * 60 * 60,
+    secure: true,
   },
   // store: new RedisStore({ client: redisClient }),
 };
